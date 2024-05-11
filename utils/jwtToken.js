@@ -1,6 +1,6 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const { UserToken } = require('../models')
+const { UserToken, User } = require('../models')
 
 const generateRefreshToken = async (user_id) => {
     try {
@@ -10,6 +10,15 @@ const generateRefreshToken = async (user_id) => {
             { expiresIn: process.env.JWT_REFRESH_TIME }
         )
 
+        const user = await User.findOne({
+            where:{
+                id : user_id
+            }
+        })
+
+        if(!user){
+            throw Error('User Id not found')
+        }
         await UserToken.create({
             UserId: user_id,
             token: refresh_token,

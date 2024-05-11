@@ -7,6 +7,7 @@ const morgan = require('morgan')
 
 const sequelize = require("./config/db")
 const auth = require('./routes/auth.route')
+const user = require('./routes/user.route')
 
 const app = express()
 
@@ -19,6 +20,7 @@ app.use(cookies());
 app.use(cors());
 
 app.use('/auth', auth)
+app.use('/api/v1', user)
 
 
 const PORT = process.env.PORT || 8080
@@ -29,8 +31,8 @@ const PORT = process.env.PORT || 8080
         console.log(
             magenta('DB: Connection has been established successfully.')
         )
-        await sequelize.sync({ force: true })
-        // await sequelize.sync({ alter: true })
+        // await sequelize.sync({ force: true })
+        await sequelize.sync({ alter: true })
 
         console.log(magenta('DB: All models were synchronized successfully.'))
         // Listen on pc port
